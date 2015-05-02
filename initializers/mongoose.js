@@ -2,6 +2,7 @@ var mongoose = require("mongoose");
 
 module.exports = {
     startPriority: 800,
+    stopPriority: 800,
     loadPriority: 800,
     initialize: function(api, next) {
         'use strict';
@@ -17,7 +18,7 @@ module.exports = {
         });
 
         api.mongoose.db.once("open", function() {
-            api.log()
+            api.log("Mongoose initializer connected to MongoDB.", "debug");
         });
 
         next();
@@ -30,7 +31,7 @@ module.exports = {
             if (api.config.taskmanager.mongo) {
                 var conn = "mongodb://"
                     .concat(api.config.taskmanager.mongo.host).concat(":")
-                    .concat(api.config.taskmanager.mongo.port).concat("/")
+                    .concat(api.config.taskmanager.mongo.port.toString()).concat("/")
                     .concat(api.config.taskmanager.mongo.database);
                 api.log("Connecting to MongoDB: " + conn, "debug");
                 api.mongoose.mongoose.connect(conn);
@@ -45,5 +46,10 @@ module.exports = {
         }
 
 
+    },
+    stop: function(api, next){
+        'use strict';
+        api.log("Closing Mongoose connection to MongoDB.", "debug");
+        api.mongoose.db.close(next);
     }
 };
