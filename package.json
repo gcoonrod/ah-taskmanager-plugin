@@ -18,5 +18,10 @@
   "bugs": {
     "url": "https://github.com/gcoonrod/ah-taskmanager-plugin/issues"
   },
-  "homepage": "https://github.com/gcoonrod/ah-taskmanager-plugin"
+  "homepage": "https://github.com/gcoonrod/ah-taskmanager-plugin",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-jsbeautifier": "^0.2.10"
+  }
 }
