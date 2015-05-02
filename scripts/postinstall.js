@@ -26,6 +26,7 @@ if(!fs.existsSync(projectFile)){
     console.log("Copying configuration files for TaskManager Plugin");
     console.log("copying " + localFile + " to " + projectFile);
     copyFile(localFile, projectFile);
-
+} else {
+    console.log("Config file already exists!");
 }
 
