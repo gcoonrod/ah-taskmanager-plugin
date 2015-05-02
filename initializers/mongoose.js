@@ -17,7 +17,7 @@ module.exports = {
         });
 
         api.mongoose.db.once("open", function() {
-            //setup models
+            api.log()
         });
 
         next();
@@ -32,7 +32,8 @@ module.exports = {
                     .concat(api.config.taskmanager.mongo.host).concat(":")
                     .concat(api.config.taskmanager.mongo.port).concat("/")
                     .concat(api.config.taskmanager.mongo.database);
-                api.mongoose.connect(conn);
+                api.log("Connecting to MongoDB: " + conn, "debug");
+                api.mongoose.mongoose.connect(conn);
 
                 next();
             } else {
