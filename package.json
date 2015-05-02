@@ -1,31 +1,32 @@
 {
-    "name": "ah-taskmanager-plugin",
-    "version": "0.0.1",
-    "description": "Command and Control for ActionHero Tasks.",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "postinstall": "node scripts/postinstall.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/gcoonrod/ah-taskmanager-plugin.git"
-    },
-    "keywords": [
-        "ActionHero"
-    ],
-    "author": "greg.coonrod@gmail.com",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/gcoonrod/ah-taskmanager-plugin/issues"
-    },
-    "homepage": "https://github.com/gcoonrod/ah-taskmanager-plugin",
-    "devDependencies": {
-        "grunt": "^0.4.5",
-        "grunt-contrib-jshint": "^0.11.2",
-        "grunt-jsbeautifier": "^0.2.10"
-    },
-    "dependencies": {
-        "mongoose": "^4.0.2"
-    }
+  "name": "ah-taskmanager-plugin",
+  "version": "0.0.1",
+  "description": "Command and Control for ActionHero Tasks.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "node scripts/postinstall.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gcoonrod/ah-taskmanager-plugin.git"
+  },
+  "keywords": [
+    "ActionHero"
+  ],
+  "author": "greg.coonrod@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gcoonrod/ah-taskmanager-plugin/issues"
+  },
+  "homepage": "https://github.com/gcoonrod/ah-taskmanager-plugin",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-jsbeautifier": "^0.2.10"
+  },
+  "dependencies": {
+    "fs-extra": "^0.18.2",
+    "mongoose": "^4.0.2"
+  }
 }
