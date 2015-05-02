@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = {
-    startPriority: 500,
-    loadPriority: 500,
+    startPriority: 810,
+    loadPriority: 810,
     initialize: function(api, next) {
         api.log("Initializing TaskManger Plugin.", "debug");
         next();
