@@ -1,5 +1,6 @@
 exports.default = {
-    taskmanager: function(api){
+    taskmanager: function(api) {
+        'use strict';
         return {
             //On/Off Switch
             active: true,
@@ -12,6 +13,6 @@ exports.default = {
                 password: null
 
             }
-        }
+        };
     }
-}
+};
