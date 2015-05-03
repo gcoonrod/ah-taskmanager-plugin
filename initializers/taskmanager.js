@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
 var _ = require('lodash');
+var Q = require('q');
 
 var Schema = mongoose.Schema;
 var ObjectId = mongoose.Schema.Types.ObjectId;
@@ -17,13 +18,35 @@ module.exports = {
             schemas: {
                 Task: new Schema({
                     name: String,
+                    status: String,
                     data: {},
                     queue: String,
                     parent: ObjectId,
-                    children: [ObjectId]
+                    children: [ObjectId],
+                    next: [ObjectId]
                 })
             },
-            models: {}
+            models: {},
+            createTask: function(name, data, queue){
+                var task =  new api.taskmanager.models.Task({
+                    name: name,
+                    status: "NOT_STARTED",
+                    data: data,
+                    queue: queue
+                });
+
+                var deferred = Q.defer();
+
+                task.save(function(err, task){
+                    if(err){
+                        deferred.reject(err);
+                    } else {
+                        deferred.resolve(task);
+                    }
+                });
+
+                return deferred.promise;
+            }
         };
 
         api.taskmanager.db
