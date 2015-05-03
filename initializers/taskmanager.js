@@ -23,16 +23,29 @@ module.exports = {
                     queue: String,
                     parent: ObjectId,
                     children: [ObjectId],
-                    next: [ObjectId]
+                    next: [ObjectId],
+                    _createdDate: Date,
+                    _modifiedDate: Date
                 })
             },
             models: {},
+            status: {
+              NOT_STARTED: "NOT_STARTED",
+                IN_PROGRESS: "IN_PROGRESS",
+                COMPLETED: "COMPLETED",
+                ERROR: "ERROR"
+            },
+            links: {
+                NEXT: "NEXT",
+                CHILD: "CHILD"
+            },
             createTask: function(name, data, queue){
                 var task =  new api.taskmanager.models.Task({
                     name: name,
-                    status: "NOT_STARTED",
+                    status: api.taskmanager.status.NOT_STARTED,
                     data: data,
-                    queue: queue
+                    queue: queue,
+                    _createdDate: new Date()
                 });
 
                 var deferred = Q.defer();
@@ -46,6 +59,63 @@ module.exports = {
                 });
 
                 return deferred.promise;
+            },
+            linkTask: function(source, target, linkType){
+                var Task = api.taskmanager.models.Task;
+                var sourceTask, targetTask;
+                var sourceUpdate, targetUpdate;
+                var options = {
+                    safe: true,
+                    upsert: false,
+                    new: true
+                };
+                var findTaskByIdAndUpdate = Q.nbind(Task.findByIdAndUpdate, Task);
+
+                function buildUpdateQueries(type){
+                    var types = api.taskmanager.links;
+                    switch (type){
+                        case types.CHILD:
+                            sourceUpdate = {
+                                $push: {children: target._id},
+                                _modifiedDate: new Date()
+                            };
+                            targetUpdate = {parent: source._id};
+                            break;
+                        case types.NEXT:
+                            sourceUpdate = {
+                                $push: {next: target._id},
+                                _modifiedDate: new Date()
+                            };
+                            targetUpdate = {parent: source._id};
+                            break;
+                        default:
+                            api.log("TaskManager - Unsupported task link type!", "error");
+                            throw new Error("Unsupported task link type!");
+                    }
+
+                    return Q();
+                }
+
+                return buildUpdateQueries(linkType)
+                    .then(function(){
+                        return findTaskByIdAndUpdate(source._id, sourceUpdate, options);
+                    })
+                    .then(function(_sourceTask){
+                        sourceTask = _sourceTask;
+                        return findTaskByIdAndUpdate(target._id, targetUpdate, options);
+                    })
+                    .then(function(_targetTask){
+                        targetTask = _targetTask;
+                        api.log("TaskManager: Tasks linked.", "debug", {
+                            source: sourceTask,
+                            target: targetTask
+                        });
+                    })
+                    .catch(function(error){
+                        api.log("TaskManager: Error linking tasks!", "error", error);
+                    });
+
+
             }
         };
 
@@ -66,7 +136,7 @@ module.exports = {
                 api.log("TaskManager - MongoDB connection successful. Initializing Schemas.", "debug");
                 _.forOwn(api.taskmanager.schemas, function(schema, name){
                     api.log("TaskManager - Compiling " + name + " schema into Mongoose model.", "debug");
-                    api.taskmanager[name] = mongoose.model(name, schema);
+                    api.taskmanager.models[name] = mongoose.model(name, schema);
                 });
             });
 
